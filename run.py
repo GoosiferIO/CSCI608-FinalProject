@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split,  GridSearchCV
 from sklearn.preprocessing import StandardScaler
 from sklearn.compose import make_column_transformer
 from sklearn.pipeline import make_pipeline
+from sklearn.linear_model import LinearRegression
 
 # cvs read
 df = pd.read_csv("data/routespeeds.csv")
@@ -154,6 +155,19 @@ grid_search = GridSearchCV(
     n_jobs=-1,
     scoring='neg_root_mean_squared_error'
 )
+
+grid_search.fit(xtrain, ytrain)
+best_k = grid_search.best_params_['kneighborsregressor__n_neighbors']
+predy_knn = grid_search.predict(xtest)
+
+print(f"Best k: {best_k}")
+
+# linear regression for comparison
+linear = LinearRegression()
+linear.fit(xtrain, ytrain)
+
+# predict
+predy_lr = linear.predict(xtest)
 
 def main():
     print(speeds.head(10))
