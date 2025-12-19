@@ -15,10 +15,8 @@ df = df.drop(
     columns=[
         "OBJECTID",
         "base64_url",
-        "agency",
         "district_name",
         "route_name",
-        "org_id",
     ]
 )
 
@@ -30,15 +28,18 @@ df = df.rename(columns={
 })
 
 # group duplicate route_id rows by taking avg speed
-avg_speed = (
-    df.groupby(["route_id", "time_period"])
-    .agg(mean_speed=("speed", "mean"))
+speeds = (
+    df.groupby(["route_id", "direction", "time_period"])
+    .agg(
+        speed=("speed", "mean"),
+        route_length=("route_length", "first")
+    )
     .reset_index()
 )
 
 
 def main():
-    print(avg_speed.head())
+    print(speeds.head(10))
 
 if __name__ == "__main__":
     main()
