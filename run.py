@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import altair as alt
+import os
 
 # cvs read
 df = pd.read_csv("data/routespeeds.csv")
@@ -35,6 +36,22 @@ speeds = (
         route_length=('route_length', 'first')
     )
     .reset_index()
+)
+
+##################################################
+# Descriptive 
+###################################################
+
+descriptive_chart = alt.Chart(speeds).mark_boxplot().encode(
+    x=alt.X('time_period:N', 
+            sort=['peak', 'offpeak', 'all_day'],
+            title='Time Period'),
+    y=alt.Y('speed:Q', title='Speed (mph)'),
+    color='time_period:N'
+).properties(
+    title='Speed Distribution by Time Period for All Routes',
+    width=400,
+    height=300
 )
 
 
