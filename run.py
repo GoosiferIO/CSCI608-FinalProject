@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import altair as alt
 import os
+from sklearn.model_selection import train_test_split
 
 # cvs read
 df = pd.read_csv("data/routespeeds.csv")
@@ -105,6 +106,27 @@ regression_line = explore_graph.transform_regression(
 
 # save chart
 (scatter + regression_line).save('outputs/explorative_scatter.html')
+
+##################################
+# Predictive
+##################################
+
+np.random.seed(42)
+
+# grab numerical features
+X = speeds[['route_length']]
+y = speeds['speed']
+
+# split data
+df_train, df_test, df_train, df_test = train_test_split(
+    speeds, test_size=0.75
+)
+
+# define training and testing sets
+xtrain = df_train[['route_length', 'direction']]
+ytrain = df_train['speed']
+xtest = df_test[['route_length', 'direction']]
+ytest = df_test['speed']
 
 
 def main():
