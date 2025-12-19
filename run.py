@@ -8,6 +8,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.compose import make_column_transformer
 from sklearn.pipeline import make_pipeline
 from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
 
 # cvs read
 df = pd.read_csv("data/routespeeds.csv")
@@ -168,6 +169,13 @@ linear.fit(xtrain, ytrain)
 
 # predict
 predy_lr = linear.predict(xtest)
+
+# evaluate
+rmspe_knn = mean_squared_error(ytest, predy_knn, squared=False)
+rmspe_lm = mean_squared_error(ytest, predy_lr, squared=False)
+
+print(f"KNN RMSE: {rmspe_knn}")
+print(f"Linear Regression RMSE: {rmspe_lm}")
 
 def main():
     print(speeds.head(10))
