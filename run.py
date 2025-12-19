@@ -2,7 +2,11 @@ import pandas as pd
 import numpy as np
 import altair as alt
 import os
-from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.model_selection import train_test_split,  GridSearchCV
+from sklearn.preprocessing import StandardScaler
+from sklearn.compose import make_column_transformer
+from sklearn.pipeline import make_pipeline
 
 # cvs read
 df = pd.read_csv("data/routespeeds.csv")
@@ -128,6 +132,28 @@ ytrain = df_train['speed']
 xtest = df_test[['route_length', 'direction']]
 ytest = df_test['speed']
 
+# scaling  preprocessor
+preprocessor = make_column_transformer(
+    (StandardScaler(), ['route_length', 'direction'])
+)
+
+# create pipeline
+pipeline = make_pipeline(
+    preprocessor, KNeighborsRegressor()
+)
+
+# 5-fold cross validation
+param_grid = {
+    'kneighborsregressor__n_neighbors': list(range(1, 21))
+}
+
+grid_search = GridSearchCV(
+    pipeline,
+    param_grid,
+    cv=5,
+    n_jobs=-1,
+    scoring='neg_root_mean_squared_error'
+)
 
 def main():
     print(speeds.head(10))
