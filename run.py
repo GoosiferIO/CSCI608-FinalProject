@@ -119,10 +119,6 @@ regression_line = explore_graph.transform_regression(
 
 np.random.seed(42)
 
-# grab numerical features
-X = speeds[['route_length']]
-y = speeds['speed']
-
 # split data
 df_train, df_test = train_test_split(
     speeds, test_size=0.25, random_state=42
