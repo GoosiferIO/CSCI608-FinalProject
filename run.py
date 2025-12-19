@@ -22,6 +22,12 @@ df = df.drop(
     ]
 )
 
+# rename columns
+df = df.rename(columns={
+	"direction_id":"direction",
+	"speed_mph":"speed",
+	"Shape_Length":"route_length",
+})
 
 def main():
     print(df.head())
