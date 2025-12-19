@@ -61,12 +61,50 @@ descriptive_chart = alt.Chart(avg_speeds_by_time_period).mark_bar().encode(
     height=300
 )
 
-
 # make output directory
 os.makedirs('outputs', exist_ok=True)
 
 # show chart
 descriptive_chart.save('outputs/descriptive_barchart.html')
+
+##################################################
+# Explorative
+###################################################
+
+# aggregate to get average speed per route
+dfexploratory = (
+    df.groupby(['org_id', 'route_id', 'direction'])
+    .agg(
+        speed=('speed', 'mean'),
+        route_length=('route_length', 'first'),
+        agency=('agency', 'first')
+    )
+    .reset_index()
+)
+
+# scatter plot route length vs avg speed
+explore_graph = alt.Chart(dfexploratory).encode(
+    x=alt.X('route_length:Q', title='Route Length'),
+    y=alt.Y('speed:Q', title='Average Speed (mph)'),
+    tooltip=['agency', 'route_id', 'direction', 'route_length', 'speed']
+)
+
+scatter = explore_graph.mark_circle(size=60, opacity=0.6, color='steelblue')
+
+# add regression line
+regression_line = explore_graph.transform_regression(
+    'route_length', 'speed'
+).mark_line(color='red', size=2)
+
+# combine
+(scatter + regression_line).properties(
+    title='Route Length vs. Average Speed',
+    width=600,
+    height=400
+)
+
+# save chart
+(scatter + regression_line).save('outputs/explorative_scatter.html')
 
 
 def main():
