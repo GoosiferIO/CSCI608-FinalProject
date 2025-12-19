@@ -124,8 +124,8 @@ X = speeds[['route_length']]
 y = speeds['speed']
 
 # split data
-df_train, df_test, df_train, df_test = train_test_split(
-    speeds, test_size=0.75
+df_train, df_test = train_test_split(
+    speeds, test_size=0.25, random_state=42
 )
 
 # define training and testing sets
