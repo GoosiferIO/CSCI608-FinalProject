@@ -42,17 +42,31 @@ speeds = (
 # Descriptive 
 ###################################################
 
-descriptive_chart = alt.Chart(speeds).mark_boxplot().encode(
+avg_speeds_by_time_period = speeds.groupby('time_period').agg(
+    mean_speed=('speed', 'mean'),
+    std_speed=('speed', 'std'),
+    count=('speed', 'count')
+).reset_index()
+
+# bar chart of average speeds by time period
+descriptive_chart = alt.Chart(avg_speeds_by_time_period).mark_bar().encode(
     x=alt.X('time_period:N', 
             sort=['peak', 'offpeak', 'all_day'],
             title='Time Period'),
-    y=alt.Y('speed:Q', title='Speed (mph)'),
+    y=alt.Y('mean_speed:Q', title='Average Speed (mph)'),
     color='time_period:N'
 ).properties(
-    title='Speed Distribution by Time Period for All Routes',
+    title='Average Speed by Time Period',
     width=400,
     height=300
 )
+
+
+# make output directory
+os.makedirs('outputs', exist_ok=True)
+
+# show chart
+descriptive_chart.save('outputs/descriptive_barchart.html')
 
 
 def main():
