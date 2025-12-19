@@ -29,11 +29,10 @@ df = df.rename(columns={
 
 # group duplicate route_id rows by taking avg speed
 speeds = (
-    df.groupby(['org_id', 'route_id', 'direction', 'time_period'])
+    df.groupby(['org_id', 'agency', 'route_id', 'direction', 'time_period'])
     .agg(
         speed=('speed', 'mean'),
-        route_length=('route_length', 'first'),
-        agency=('agency', 'first')
+        route_length=('route_length', 'first')
     )
     .reset_index()
 )
