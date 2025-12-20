@@ -188,6 +188,36 @@ def main():
         print(f"\nBest model: Linear Regression")
         print(f"Linear Regression is better by {rmspe_knn - rmspe_lm:.2f} mph")
 
+    ##################################
+    # Inference
+    ##################################
+
+    # get routes from both directions (0 and 1)
+    paired_routes = speeds.groupby(['org_id', 'route_id'])['direction'].nunique()
+    paired_routes = paired_routes[paired_routes == 2].index
+
+    # isolate data to just paired routes
+    paired_data = speeds.set_index(['org_id', 'route_id']).loc[paired_routes].reset_index()
+
+    # split into two datasets
+    dir0 = paired_data[paired_data['direction'] == 0]
+    dir1 = paired_data[paired_data['direction'] == 1]
+
+    print(f"\nDir0 routes: {len(dir0)}")
+    print(f"Dir1 routes: {len(dir1)}")
+
+    # get mean speeds
+    mean_dir0 = dir0['speed'].mean()
+    mean_dir1 = dir1['speed'].mean()
+
+    # compare (observed diff)
+    observed_diff = mean_dir0 - mean_dir1
+
+    print(f"\nMean Speed Direction 0: {mean_dir0:.2f} mph")
+    print(f"Mean Speed Direction 1: {mean_dir1:.2f} mph")
+    print(f"Observed Difference (Dir0 - Dir1): {observed_diff:.2f} mph")
+
+
 
 if __name__ == "__main__":
     main()
