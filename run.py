@@ -217,7 +217,27 @@ def main():
     print(f"Mean Speed Direction 1: {mean_dir1:.2f} mph")
     print(f"Observed Difference (Dir0 - Dir1): {observed_diff:.2f} mph")
 
+    boot_diffs = pd.concat([
+        pd.DataFrame({
+            'diff': [
+                dir1.sample(frac=1, replace=True)['speed'].mean() - 
+                dir0.sample(frac=1, replace=True)['speed'].mean()
+            ],
+            'replicate': [n]
+        })
+        for n in range(20_000)
+    ])
 
+    print(f"\nBookstrap created {len(boot_diffs)} differences.")
+
+    # get ci_bounds
+    ci_bounds = boot_diffs['diff'].quantile([0.025, 0.975]).values
+
+    print(f"\n95% Confidence Interval:")
+    print(f"  Lower: {ci_bounds[0.025]:.2f} mph")
+    print(f"  Upper: {ci_bounds[0.975]:.2f} mph")
+
+    
 
 if __name__ == "__main__":
     main()
