@@ -231,13 +231,18 @@ def main():
     print(f"\nBookstrap created {len(boot_diffs)} differences.")
 
     # get ci_bounds
-    ci_bounds = boot_diffs['diff'].quantile([0.025, 0.975]).values
+    ci_bounds = boot_diffs['diff'].quantile([0.025, 0.975])
 
     print(f"\n95% Confidence Interval:")
-    print(f"  Lower: {ci_bounds[0.025]:.2f} mph")
-    print(f"  Upper: {ci_bounds[0.975]:.2f} mph")
+    lower_bound = ci_bounds[0.025]
+    upper_bound = ci_bounds[0.975]
+    print(f"Lower: {lower_bound:.2f} mph")
+    print(f"Upper: {upper_bound:.2f} mph")
 
-    
+    if lower_bound <= 0 <= upper_bound:
+        print("Conclusion: Direction does not significantly affect speed")
+    else:
+        print("Conclusion: Direction significantly affects speed")
 
 if __name__ == "__main__":
     main()
