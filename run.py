@@ -50,6 +50,10 @@ def main():
     # Descriptive 
     ###################################################
 
+    print("\n################################")
+    print("\n BEGIN DESCRIPTIVE ANALYSIS ")
+    print("\n################################")
+
     avg_speeds_by_time_period = speeds.groupby('time_period').agg(
         mean_speed=('speed', 'mean'),
         std_speed=('speed', 'std'),
@@ -78,6 +82,10 @@ def main():
     ##################################################
     # Explorative
     ###################################################
+
+    print("\n################################")
+    print("\n BEGIN EXPLORATIVE ANALYSIS ")
+    print("\n################################")
 
     # aggregate to get average speed per route
     dfexploratory = (
@@ -117,6 +125,10 @@ def main():
     ##################################
     # Predictive
     ##################################
+
+    print("\n################################")
+    print("\n BEGIN PREDICTIVE ANALYSIS ")
+    print("\n################################")
 
     np.random.seed(42)
 
@@ -191,6 +203,10 @@ def main():
     ##################################
     # Inference
     ##################################
+
+    print("\n################################")
+    print("\n BEGIN INFERENCE ANALYSIS ")
+    print("\n################################")
 
     # get routes from both directions (0 and 1)
     paired_routes = speeds.groupby(['org_id', 'route_id'])['direction'].nunique()

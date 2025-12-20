@@ -12,3 +12,10 @@ active/Scripts/Activate.ps1
 pip install -r requirements.txt
 ```
 
+# Run
+
+To run the analysis, execute the `run.py` script:
+
+```bash
+python run.py
+```
